@@ -1,4 +1,4 @@
-name: "JFrog Integration Example"
+name: "JuiceShop CI"
 on: push
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
            node-version: '22'
            
        - name: Set CLI Config
-         run: jf npm-config --repo-resolve=js-sd-npm-remote --repo-deploy=js-sd-npm-local
+         run: jf npm-config --repo-resolve=js-sd-npm --repo-deploy=js-sd-npm
            
        - name: Install Deps
          run: jf npm install

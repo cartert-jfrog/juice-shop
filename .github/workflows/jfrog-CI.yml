@@ -10,7 +10,7 @@ on:
 
 #env:
 #  JFROG_CLI_AVOID_NEW_VERSION_WARNING: 'true'
-  
+
 permissions:
   actions: read           # for detecting the Github Actions environment
   id-token: write         # for creating OIDC tokens for signing
@@ -31,10 +31,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
- #
- # Setup the JFrog CLI using OIDC authentication
- #
-      - name: Setup JFrog CLI 
+
+      #
+      # Setup the JFrog CLI using OIDC authentication
+      #
+      - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         id: setup-cli
         env:
@@ -42,22 +43,21 @@ jobs:
           JF_PROJECT: ${{ vars.JF_PROJECT }}
           JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-            version: '2.78.7'
-            oidc-provider-name: js-oidc
-            oidc-audience: js-github
+          version: '2.78.7'
+          oidc-provider-name: js-oidc
+          oidc-audience: js-github
 
-           
-       - name: Set CLI Config
-         run: jf npm-config --repo-resolve=js-sd-npm-remote
-           
-       - name: Install Deps
-         run: jf npm install
-         
-       - name: Publish
-         run: jf npm publish
-         
-       - name: Publish Build info With JFrog CLI
-         run: |
+      - name: Set CLI Config
+        run: jf npm-config --repo-resolve=js-sd-npm-remote
+
+      - name: Install Deps
+        run: jf npm install
+
+      - name: Publish
+        run: jf npm publish
+
+      - name: Publish Build info With JFrog CLI
+        run: |
           # Collect environment variables for the build
           jf rt build-collect-env
           # Collect VCS details from git and add them to the build

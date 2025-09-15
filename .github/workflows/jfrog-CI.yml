@@ -17,15 +17,23 @@ permissions:
   contents: write         # for creating fixing pull requests and pushing changes
   pull-requests: write    # for creating pull requests to fix vulnerabilities
   security-events: write  # for uploading SARIF results to GitHub Code Scanning
-  
+
+#
+# Setup environment with NPM on Ubuntu
+#
 jobs:
   build:
-     runs-on: ubuntu-latest
-       
-     steps:
-       - name: Checkout
-         uses: actions/checkout@v3
-
+    runs-on: ubuntu-latest       
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+ #
+ # Setup the JFrog CLI using OIDC authentication
+ #
       - name: Setup JFrog CLI 
         uses: jfrog/setup-jfrog-cli@v4
         id: setup-cli
@@ -37,11 +45,7 @@ jobs:
             version: '2.78.7'
             oidc-provider-name: js-oidc
             oidc-audience: js-github
-           
-       - name: Setup Node npm
-         uses: actions/setup-node@v4
-         with:
-           node-version: '22'
+
            
        - name: Set CLI Config
          run: jf npm-config --repo-resolve=js-sd-npm-remote

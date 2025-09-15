@@ -23,7 +23,7 @@ jobs:
            node-version: '22'
            
        - name: Set CLI Config
-         run: jf npm-config --repo-resolve=js-sd-npm --repo-deploy=js-sd-npm
+         run: jf npm-config
            
        - name: Install Deps
          run: jf npm install

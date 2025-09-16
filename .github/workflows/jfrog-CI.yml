@@ -48,14 +48,17 @@ jobs:
           oidc-audience: js-github
 
       - name: Set CLI Config
-        run: jf npm-config --repo-resolve=js-sd-npm-remote
+        run: jf npm-config --repo-resolve="js-sd-npm-remote"
 
       - name: Install Deps
-        run: jf npm install
+        run: jf npm ci
 
       - name: Publish
         run: jf npm publish
 
+      - name: Audit
+        run: jf audit
+        
       - name: Publish Build info With JFrog CLI
         run: |
           # Collect environment variables for the build
@@ -64,3 +67,16 @@ jobs:
           jf rt build-add-git
           # Publish build info
           jf rt build-publish
+          
+      - name: JFrog Frogbot Repository Scan
+        uses: jfrog/frogbot@v2
+        id: frogbot
+        with:
+          oidc-provider-name: js-oidc
+          oidc-audience: js-github
+        env:
+          JF_URL: ${{ vars.JF_URL }}
+          JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JF_PROJECT: ${{ vars.JF_PROJECT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JF_MIN_SEVERITY: "High"

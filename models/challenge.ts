@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2025 Bjoern Kimminich & the OWASP Juice Shop contributors.
+ * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.
  * SPDX-License-Identifier: MIT
  */
 
@@ -123,7 +123,8 @@ const CHALLENGE_KEYS = [
   'closeNotificationsChallenge',
   'csafChallenge',
   'exposedCredentialsChallenge',
-  'leakedApiKeyChallenge'
+  'leakedApiKeyChallenge',
+  'passwordHashLeakChallenge'
 ] as const
 
 export type ChallengeKey = typeof CHALLENGE_KEYS[number]
@@ -137,8 +138,6 @@ InferCreationAttributes<Challenge>
   declare category: string
   declare description: string
   declare difficulty: number
-  declare hint: string | null
-  declare hintUrl: string | null
   declare mitigationUrl: CreationOptional<string> | null
   declare key: ChallengeKey
   declare disabledEnv: CreationOptional<string> | null
@@ -166,8 +165,6 @@ const ChallengeModelInit = (sequelize: Sequelize) => {
       tags: DataTypes.STRING,
       description: DataTypes.STRING,
       difficulty: DataTypes.INTEGER,
-      hint: DataTypes.STRING,
-      hintUrl: DataTypes.STRING,
       mitigationUrl: DataTypes.STRING,
       solved: DataTypes.BOOLEAN,
       disabledEnv: DataTypes.STRING,
